@@ -13,11 +13,11 @@
  *
  * What it does:
  *   - Re-indents based on block-opening / block-closing keywords
- *       DO WHILE(...)         ... ENDDO
+ *       DO WHILE(...)         ... ENDWHILE
  *       IF (...)              ... ENDIF   (with optional ELSE / ELSEIF)
  *       FOR (...)             ... ENDFOR  (if used in your dialect)
  *   - Normalizes indent width (default 4 spaces, configurable with --indent N)
- *   - Uppercases known reserved keywords (DEFINE, DO, WHILE, ENDDO, IF, THEN,
+ *   - Uppercases known reserved keywords (DEFINE, DO, WHILE, ENDWHILE, IF, THEN,
  *     ELSE, ELSEIF, ENDIF, STOP, START, DELAY, FOR, ENDFOR) so mixed-case
  *     source is normalized consistently -- disable with --no-upper-keywords
  *   - Leaves comments (lines/trailing text starting with "!") untouched in
@@ -88,7 +88,7 @@ Options:
 // Keywords that are normalized to uppercase when found as whole words.
 const KEYWORDS = [
   'DEFINE', 'FLOAT', 'INTEGER', 'STRING',
-  'DO', 'WHILE', 'ENDDO',
+  'DO', 'WHILE', 'ENDWHILE',
   'IF', 'THEN', 'ELSE', 'ELSEIF', 'ENDIF',
   'FOR', 'ENDFOR', 'NEXT',
   'STOP', 'START', 'DELAY',
@@ -101,11 +101,12 @@ const OPENERS = [
   /^DO\s*$/i,
   /^FOR\s*\(/i,
   /^IF\s*\(.*\)\s*THEN\s*$/i, // block-if (THEN with no single-line body)
+  /^IF\s*\(.*\)\s*$/i,        // block-if with no THEN at all (dialect variant)
 ];
 
 // Lines that CLOSE a block: indent decreases for this line itself.
 const CLOSERS = [
-  /^ENDDO\b/i,
+  /^ENDWHILE\b/i,
   /^ENDFOR\b/i,
   /^ENDIF\b/i,
 ];
@@ -148,7 +149,10 @@ function upperKeywordsInLine(line, enabled) {
       return result;
     }
 
-    if (ch === '"') {
+    // Treat straight quotes and "smart"/curly quotes (common when text is
+    // pasted from Word, PDF slides, etc.) the same way: each one toggles
+    // whether we're inside a string.
+    if (ch === '"' || ch === '“' || ch === '”') {
       flushBuf();
       inString = !inString;
       result += ch;

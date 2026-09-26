@@ -11,7 +11,7 @@ Gives you:
   `"strings"`, `$variables`, `.AND.`/`.EQ.`-style operators, numbers, timespans
   like `5s`)
 - A built-in formatter (Format Document / Format on Save) that re-indents
-  based on `DO WHILE`/`ENDDO` and `IF...THEN`/`ELSE`/`ELSEIF`/`ENDIF` blocks
+  based on `DO WHILE`/`ENDWHILE` and `IF...THEN`/`ELSE`/`ELSEIF`/`ENDIF` blocks
 
 ### Install (no publishing needed)
 1. Copy the `vscode-extension` folder into your VS Code extensions directory:
@@ -60,7 +60,7 @@ per Event" example, useful for a quick sanity check.
 
 Both formatters are line-based, not a full parser. They recognize:
 - Block openers: `DO WHILE(...)`, bare `DO`, `FOR(...)`, `IF (...) THEN`
-- Block closers: `ENDDO`, `ENDFOR`, `ENDIF`
+- Block closers: `ENDWHILE`, `ENDFOR`, `ENDIF`
 - Mid-block markers: `ELSE`, `ELSEIF(...)`
 
 Anything else is left as-is and just re-indented to the current level. If

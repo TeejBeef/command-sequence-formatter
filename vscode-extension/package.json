@@ -1,0 +1,50 @@
+{
+  "name": "survalent-command-sequence",
+  "displayName": "Survalent Command Sequence",
+  "description": "Syntax highlighting and formatting for Survalent SmartVU / SurvalentONE command sequence scripts (.seq)",
+  "version": "0.1.0",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Formatters"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "survalent",
+        "aliases": ["Survalent Command Sequence", "survalent"],
+        "extensions": [".seq", ".cmdseq", ".comseq"],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "survalent",
+        "scopeName": "source.survalent",
+        "path": "./syntaxes/survalent.tmLanguage.json"
+      }
+    ],
+    "configuration": {
+      "title": "Survalent Command Sequence",
+      "properties": {
+        "survalent.format.indentSize": {
+          "type": "number",
+          "default": 4,
+          "description": "Number of spaces per indent level when formatting."
+        },
+        "survalent.format.upperCaseKeywords": {
+          "type": "boolean",
+          "default": true,
+          "description": "Uppercase reserved keywords (DEFINE, DO WHILE, IF/THEN, etc.) when formatting."
+        }
+      }
+    }
+  },
+  "activationEvents": [
+    "onLanguage:survalent"
+  ]
+}

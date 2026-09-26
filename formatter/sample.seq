@@ -1,26 +1,31 @@
-! Restart DataExchange Server Only Once per Event
-DEFINE FLOAT $OMS_STATE ! Variable to store the current OMS connection state
-DEFINE FLOAT $RESTARTED ! Flag to track if restart has already occurred
-$RESTARTED = 0 ! Initialize flag (0 = not restarted, 1 = restarted)
+! Useful Command Sequences - The point hasn't changed for 15M
 
-DO WHILE(1)
+DEFINE FLOAT $PREV
+DEFINE FLOAT $ELAPSED
+DEFINE FLOAT $CURRENT
 
-! Read the current state of the Milsoft OMS connection
-! 0 indicates the connection is lost
+! Initialize values
+$PREV = "stationA,pointA"
+$ELAPSED = 0
 
-$OMS_STATE = "SYS,milsoftOMSstate" !Please put the link status point
+! Infinite loop for monitoring
+DO WHILE (1)
+$CURRENT = " stationA,pointA " !Point for monitoring
 
-! Check if the connection is lost and the server has not
-! already been restarted for this event
-
-IF (($OMS_STATE .EQ. 0) .AND. ($RESTARTED .EQ. 0)) THEN
-
-! Restart the DataExchange server
-
-STOP "deservers:MILSOFT_OMS_SERVER" !DE server Name
-DELAY 5s
-START "deservers:MILSOFT_OMS_SERVER" !DE server Name
-
+! If the value has not changed
+IF ($CURRENT .EQ. $PREV)
+! Increment the elapsed time counter
+$ELAPSED = $ELAPSED + 1000
+! If the time exceeds 15 minutes (900,000 ms), change a pseudo point
+IF ($ELAPSED .GE. 900000)
+" stationB,pointB" = 1 ! change state of a pseudo point
+ENDIF
+ELSE
+! Reset the timer and update the previous value if the point changes
+$PREV = $CURRENT
+$ELAPSED = 0
 ENDIF
 
-ENDDO
+DELAY 1000Ms ! Wait 1 second before checking again
+
+ENDWHILE
