@@ -7,7 +7,7 @@ const vscode = require('vscode');
 
 const KEYWORDS = [
   'DEFINE', 'FLOAT', 'INTEGER', 'STRING',
-  'DO', 'WHILE', 'ENDDO',
+  'DO', 'WHILE', 'ENDWHILE',
   'IF', 'THEN', 'ELSE', 'ELSEIF', 'ENDIF',
   'FOR', 'ENDFOR', 'NEXT',
   'STOP', 'START', 'DELAY',
@@ -19,10 +19,11 @@ const OPENERS = [
   /^DO\s*$/i,
   /^FOR\s*\(/i,
   /^IF\s*\(.*\)\s*THEN\s*$/i,
+  /^IF\s*\(.*\)\s*$/i,
 ];
 
 const CLOSERS = [
-  /^ENDDO\b/i,
+  /^ENDWHILE\b/i,
   /^ENDFOR\b/i,
   /^ENDIF\b/i,
 ];
@@ -59,7 +60,9 @@ function upperKeywordsInLine(line, enabled) {
       return result;
     }
 
-    if (ch === '"') {
+    // Treat straight quotes and "smart"/curly quotes (common when text is
+    // pasted from Word, PDF slides, etc.) the same way.
+    if (ch === '"' || ch === '“' || ch === '”') {
       flushBuf();
       inString = !inString;
       result += ch;

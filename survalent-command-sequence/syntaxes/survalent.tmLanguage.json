@@ -35,6 +35,12 @@
               "match": "\\\\."
             }
           ]
+        },
+        {
+          "comment": "Smart/curly double quotes, e.g. pasted in from Word or a PDF slide.",
+          "name": "string.quoted.double.survalent",
+          "begin": "“",
+          "end": "”"
         }
       ]
     },
@@ -42,7 +48,7 @@
       "patterns": [
         {
           "name": "keyword.control.survalent",
-          "match": "(?i)\\b(DO|WHILE|ENDDO|IF|THEN|ELSE|ELSEIF|ENDIF|FOR|ENDFOR|NEXT)\\b"
+          "match": "(?i)\\b(DO|WHILE|ENDWHILE|IF|THEN|ELSE|ELSEIF|ENDIF|FOR|ENDFOR|NEXT)\\b"
         }
       ]
     },
@@ -102,7 +108,7 @@
       "patterns": [
         {
           "name": "constant.numeric.timespan.survalent",
-          "match": "\\b[0-9]+(s|ms|m|h)\\b"
+          "match": "(?i)\\b[0-9]+(ms|s|m|h)\\b"
         }
       ]
     }
