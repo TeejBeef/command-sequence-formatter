@@ -1,0 +1,26 @@
+! Restart DataExchange Server Only Once per Event
+DEFINE FLOAT $OMS_STATE ! Variable to store the current OMS connection state
+DEFINE FLOAT $RESTARTED ! Flag to track if restart has already occurred
+$RESTARTED = 0 ! Initialize flag (0 = not restarted, 1 = restarted)
+
+DO WHILE(1)
+
+! Read the current state of the Milsoft OMS connection
+! 0 indicates the connection is lost
+
+$OMS_STATE = "SYS,milsoftOMSstate" !Please put the link status point
+
+! Check if the connection is lost and the server has not
+! already been restarted for this event
+
+IF (($OMS_STATE .EQ. 0) .AND. ($RESTARTED .EQ. 0)) THEN
+
+! Restart the DataExchange server
+
+STOP "deservers:MILSOFT_OMS_SERVER" !DE server Name
+DELAY 5s
+START "deservers:MILSOFT_OMS_SERVER" !DE server Name
+
+ENDIF
+
+ENDDO
